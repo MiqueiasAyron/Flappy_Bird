@@ -6,10 +6,10 @@ class Vendedor():
         self.vendas = 0 # quando o VENDEDOR é criado, ele começa com vendas = 0
       
 
-    def vendeu(self, vendas):
+    def vendeu(self, vendas): # função da classe Vendedor
         self.vendas = vendas # aqui editamos o VENDAS para o valor que vamos informar no parêntese (self, vendas)
 
-    def bateu(self, meta):
+    def bateu(self, meta): # função da classe Vendedor
         if self.vendas > meta:
             print(self.nome , 'bateu a meta')
         else:

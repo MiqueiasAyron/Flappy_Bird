@@ -66,3 +66,8 @@ vendedor1.bateu(600)
 vendedor2 = Vendedor('Marcos')
 vendedor2.vendeu(450)
 vendedor2.bateu(600)
+
+'''
+As características das instâncias dentro de uma classe são definidas dentro da função __init__  e os métodos 
+(coisas que os elementos da classe podem fazer) são definidos como outras funções.
+'''
