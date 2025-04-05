@@ -23,9 +23,9 @@ FONTE_PONTOS = pygame.font.SysFont('arial', 50)
 class Passaro():
     
     IMGS = IMAGENS_PASSARO
-
+     
     #animações de rotação
-    ROTACAO_MAXIMA = 25
+    ROTACAO_MAXIMA = 25 
     VELOCIDADE_ROTACAO = 20
     TEMPO_ANIMACAO = 5
   
@@ -138,7 +138,7 @@ class Cano():
         distancia_topo = (self.x - passaro.x , self.pos_topo - round(passaro.y))
         distancia_base = (self.x - passaro.x , self.pos_base - round(passaro.y))
 
-        topo_ponto = passaro_mask.overlap(topo_mask, distancia_topo)
+        topo_ponto = passaro_mask.overlap(topo_mask, distancia_topo)   
         base_ponto = passaro_mask.overlap(base_mask, distancia_base)
 
         if base_ponto or topo_ponto:
@@ -175,10 +175,10 @@ def desenhar_tela(tela, passaros, canos, chao, pontos):
         passaro.desenhar(tela)
     for cano in canos:
         cano.desenhar(tela)
-    texto = FONTE_PONTOS.render(f'Score: {pontos}', 1, (255,255,255))
+    texto = FONTE_PONTOS.render(f'score: {pontos}', 1, (255,255,255))
     tela.blit(texto, (TELA_LARGURA - 10 - texto.get_width() , 10))
     chao.desenhar(tela)
-    pygame.display.update()
+    pygame.display.update()    
 
 def main():
     passaros = [Passaro(230,350)]
