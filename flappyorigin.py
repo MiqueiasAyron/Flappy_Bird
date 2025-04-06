@@ -1,8 +1,8 @@
 import pygame 
-import os 
-import random 
+import os # integração de imagens
+import random  # biblioteca
 
-
+# declarando todas as constantes do jogo
 
 TELA_LARGURA = 500
 TELA_ALTURA = 800
@@ -16,39 +16,42 @@ IMAGENS_PASSARO = [
     pygame.transform.scale2x(pygame.image.load(os.path.join('imagens','bird3.png')))
     ]
 
-pygame.font.init() 
+pygame.font.init() #inicializando fonte de texto
 FONTE_PONTOS = pygame.font.SysFont('arial', 50)
 
+# criando os objetos do jogo 
 class Passaro():
     
     IMGS = IMAGENS_PASSARO
      
+    #animações de rotação
     ROTACAO_MAXIMA = 25 
     VELOCIDADE_ROTACAO = 20
     TEMPO_ANIMACAO = 5
   
-    def __init__(self, x, y): 
+    # função de criação do pássaro
+    def __init__(self, x, y): # vamos definir todas os atributos no instante da criação do objeto , por isso definimos dentro do __init__
         self.x = x
         self.y = y
-        self.angulo = 0
-        self.velocidade = 0 
+        self.angulo = 0 # o pássaro começa com ângulo 0
+        self.velocidade = 0 # o pássaro começa com velocidade 0 (só se movimenta em y) 
         self.altura = self.y
-        self.tempo = 0
-        self.contagem_imagem = 0
+        self.tempo = 0 # tempo de cada pulo (tempo p/ realizar cada parábola)
+        self.contagem_imagem = 0 # imagem 1, 2 ou 3 do pássaro
         self.imagem = self.IMGS[0]
 
-    
+    # função de pular
     def pular(self):
         self.velocidade = -10.5
         self.tempo = 0
         self.altura = self.y
 
     def mover(self):
-        
+        # calcular o deslocamento
         self.tempo += 1
-        deslocamento = 1.5*(self.tempo**2) + self.tempo*self.velocidade 
+        deslocamento = 1.5*(self.tempo**2) + self.tempo*self.velocidade # formula do sorvetão
 
-        
+        # restringir o deslocamento
         if deslocamento > 16:
             deslocamento = 16
         elif deslocamento < 0:
@@ -56,7 +59,7 @@ class Passaro():
 
         self.y += deslocamento
                   
-        
+        # o angulo do passaro
         if deslocamento < 0 or self.y < (self.altura + 50):
             if self.angulo < self.ROTACAO_MAXIMA:   
                 self.angulo = self.ROTACAO_MAXIMA
@@ -65,7 +68,7 @@ class Passaro():
                 self.angulo -= self.VELOCIDADE_ROTACAO
 
     def desenhar(self,tela):
-        
+        # definir qual imagem do pássaro vai usar ( criar movimento de bater asas )
         self.contagem_imagem += 1
         if self.contagem_imagem < self.TEMPO_ANIMACAO:
             self.imagem = self.IMGS[0]
@@ -79,23 +82,31 @@ class Passaro():
             self.imagem = self.IMGS[0]
             self.contagem_imagem = 0
 
-        
+        # se o pássaro tiver caindo, não vai bater asas
         if self.angulo < -80:
             self.imagem = self.IMGS[1]
             self.contagem_imagem = self.TEMPO_ANIMACAO*2
 
-        
+        # desenhar a imagem
         imagem_rotacionada = pygame.transform.rotate(self.imagem, self.angulo)
         pos_centro_imagem = self.imagem.get_rect(topleft=(self.x , self.y)).center
         rentangulo = imagem_rotacionada.get_rect(center = pos_centro_imagem)
         tela.blit(imagem_rotacionada, rentangulo.topleft)
 
+
+# A imagem do pássaro é criada dentro de um retângulo. Portanto, nas condições de 
+# colisão, o programa iria detectar colição com o retângulo que circunda a imagem do
+# pássaro gerando uma espécie de bug no jogo e comprometendo a jogabilidade. Para e-
+# vitar isso, vamos criar uma MASK; vamos dividir o retângulo em vários pixels. Assim,
+# a colisão vai ser verificada averiguando se dentro de um mesmo pixel existe cano e 
+# pássaro.
+
     def get_mask(self):
         return pygame.mask.from_surface(self.imagem)
 
 class Cano():
-    DISTANCIA = 200 
-    VELOCIDADE = 5 
+    DISTANCIA = 200 # distância entre os canos de cima e de baixo
+    VELOCIDADE = 5 # velocidade horizontal do cano
 
     def __init__(self, x):
         self.x = x
@@ -179,8 +190,9 @@ def main():
 
     rodando = True
     while rodando :
-        relogio.tick(30) 
+        relogio.tick(30) # 30 fps ( 30 frames por segundos)
 
+        # interação com o usuário
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 rodando = False
@@ -191,6 +203,7 @@ def main():
                     for passaro in passaros:
                         passaro.pular()
         
+        # mover as coisas 
         for passaro in passaros:
             passaro.mover()
         chao.mover()
@@ -200,7 +213,7 @@ def main():
         for cano in canos:
             for i, passaro in enumerate(passaros):
                 if cano.colidir(passaro):
-                    passaro.pop(i) 
+                    passaro.pop(i) # o pássaro que colide será removido
                 if not cano.passou and passaro.x > cano.x:
                     cano.passou = True
                     adicionar_cano = True
