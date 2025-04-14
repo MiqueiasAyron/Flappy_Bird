@@ -134,7 +134,7 @@ class Cano():
         passaro_mask = passaro.get_mask()
         topo_mask = pygame.mask.from_surface(self.CANO_TOPO)
         base_mask = pygame.mask.from_surface(self.CANO_BASE)
-
+ 
         distancia_topo = (self.x - passaro.x , self.pos_topo - round(passaro.y))
         distancia_base = (self.x - passaro.x , self.pos_base - round(passaro.y))
 
@@ -205,7 +205,7 @@ def main():
         
         # mover as coisas 
         for passaro in passaros:
-            passaro.mover()
+            passaro.mover() 
         chao.mover()
 
         adicionar_cano = False
